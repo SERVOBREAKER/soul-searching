@@ -344,7 +344,7 @@ GameObject:
   - component: {fileID: 7395170233341715225}
   - component: {fileID: 7395170233341715226}
   m_Layer: 0
-  m_Name: Title
+  m_Name: NPC Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -555,7 +555,6 @@ MonoBehaviour:
   statDrain1: {fileID: 11400000, guid: cbaa26bc1fd00a84281c40de78118e05, type: 2}
   statDrain2: {fileID: 11400000, guid: cbaa26bc1fd00a84281c40de78118e05, type: 2}
   statDrain3: {fileID: 11400000, guid: cbaa26bc1fd00a84281c40de78118e05, type: 2}
-  isDraining: 0
 --- !u!61 &1904375500348343566
 BoxCollider2D:
   m_ObjectHideFlags: 0

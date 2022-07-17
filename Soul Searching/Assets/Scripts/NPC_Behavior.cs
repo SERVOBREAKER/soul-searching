@@ -30,7 +30,7 @@ public class NPC_Behavior : MonoBehaviour
     public Float_Data statDrain2;
     public Float_Data statDrain3;
 
-    [SerializeField] private bool isDraining = false;
+    private bool isDraining = false;
 
 
     private void Start()
