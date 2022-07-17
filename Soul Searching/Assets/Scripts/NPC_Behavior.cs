@@ -20,6 +20,8 @@ public class NPC_Behavior : MonoBehaviour
     public float Normalize(float min, float max, float value)
     {return(value - min)/(max - min);}
 
+    public SpriteRenderer backdropSprite;
+
 [Header("Stat Sprites")]
     public Image statBar1;
     public Image statBar2;
@@ -31,6 +33,8 @@ public class NPC_Behavior : MonoBehaviour
     public Float_Data statDrain3;
 
     private bool isDraining = false;
+    private bool isPossessed = false;
+    public GameObject particle;
 
 
     private void Start()
@@ -41,11 +45,15 @@ public class NPC_Behavior : MonoBehaviour
         currentStat2 = stat2;
         currentStat3 = stat3;
 
+        isPossessed = false;
+
         //titleObject.gameObject.SetActive(true);
 
         statBar1.gameObject.SetActive(false);
         statBar2.gameObject.SetActive(false);
         statBar3.gameObject.SetActive(false);
+
+        backdropSprite.size = new Vector2(3f,0.5f);
     }
 
     private void LateUpdate()
@@ -87,11 +95,25 @@ public class NPC_Behavior : MonoBehaviour
     private void OnMouseDown()
     {
         isDraining = !isDraining;
+        particle.gameObject.SetActive(true);
+        isPossessed = !isPossessed;
+
+        if (isPossessed == true)
+        {
+            particle.gameObject.SetActive(true);
+        }
+
+        else
+        {
+            particle.gameObject.SetActive(false);
+        }
+
     }
 
     private void OnMouseEnter()
     {
-        titleObject.transform.Translate(0,1,0);
+        titleObject.transform.Translate(0,1.35f,0);
+
     }
 
     private void OnMouseOver()
@@ -99,14 +121,18 @@ public class NPC_Behavior : MonoBehaviour
         statBar1.gameObject.SetActive(true);
         statBar2.gameObject.SetActive(true);
         statBar3.gameObject.SetActive(true);
+
+        backdropSprite.size = new Vector2(3f,2f);
     }
 
     private void OnMouseExit()
     {
-        titleObject.transform.Translate(0,-1,0);
+        titleObject.transform.Translate(0,-1.35f,0);
         statBar1.gameObject.SetActive(false);
         statBar2.gameObject.SetActive(false);
         statBar3.gameObject.SetActive(false);
+
+        backdropSprite.size = new Vector2(3f,0.5f);
     }
 
 }
