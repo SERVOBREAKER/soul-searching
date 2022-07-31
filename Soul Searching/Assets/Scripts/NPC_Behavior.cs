@@ -15,26 +15,38 @@ public class NPC_Behavior : MonoBehaviour
     [Range(0.0f,10.0f)] public float stat2;
     [Range(0.0f,10.0f)] public float stat3;
 
+    //[SerializeField] 
     private float currentStat1, currentStat2, currentStat3;
 
     public float Normalize(float min, float max, float value)
     {return(value - min)/(max - min);}
 
-    public SpriteRenderer backdropSprite;
-
-[Header("Stat Sprites")]
-    public Image statBar1;
-    public Image statBar2;
-    public Image statBar3;
+[HideInInspector]
+    public float normalizedStat1, normalizedStat2, normalizedStat3;
 
 [Header("Stat Modifiers")]
     public Float_Data statDrain1;
     public Float_Data statDrain2;
     public Float_Data statDrain3;
 
-    private bool isDraining = false;
-    private bool isPossessed = false;
+    public Float_Data regenRate1;
+    public Float_Data regenRate2;
+    public Float_Data regenRate3;
+
+[Header("Stat Sprites")]
+    public Image statBar1;
+    public Image statBar2;
+    public Image statBar3;
+    public SpriteRenderer backdropSprite;
+    
+[HideInInspector]
+    public bool isPossessed = false;
+
     public GameObject particle;
+
+    private Stat_Display statDisplay;
+
+    private float titleStartY;
 
 
     private void Start()
@@ -49,19 +61,37 @@ public class NPC_Behavior : MonoBehaviour
 
         //titleObject.gameObject.SetActive(true);
 
-        statBar1.gameObject.SetActive(false);
-        statBar2.gameObject.SetActive(false);
-        statBar3.gameObject.SetActive(false);
+        SetObjectStates(false);
 
         backdropSprite.size = new Vector2(3f,0.5f);
+
+        statDisplay = FindObjectOfType<Stat_Display>();
+
+        titleStartY = titleObject.transform.localPosition.y;
+
     }
 
     private void LateUpdate()
     {
-        if (isDraining)
+        if (isPossessed)
         {
             DrainStat();
+            particle.gameObject.SetActive(true);
         }
+
+        if (!isPossessed)
+        {
+            GainStat();
+            particle.gameObject.SetActive(false);
+        }
+
+        if(Input.GetMouseButtonDown(1))
+        {
+            isPossessed = false;
+            statDisplay.InputNPC(null);
+        }
+
+
     }
 
 //Handling of title text objects.
@@ -75,16 +105,30 @@ public class NPC_Behavior : MonoBehaviour
 //Handling of stats objects.
     private void DisplayStats()
     {
-        statBar1.fillAmount = Normalize(0,stat1,currentStat1);
-        statBar2.fillAmount = Normalize(0,stat2,currentStat2);
-        statBar3.fillAmount = Normalize(0,stat3,currentStat3);
+        normalizedStat1 = Normalize(0,stat1,currentStat1);
+        normalizedStat2 = Normalize(0,stat2,currentStat2);
+        normalizedStat3 = Normalize(0,stat3,currentStat3);
+
+        statBar1.fillAmount = normalizedStat1;
+        statBar2.fillAmount = normalizedStat2;
+        statBar3.fillAmount = normalizedStat3;
+    }
+
+    private void GainStat()
+    {
+        if (currentStat1 <= stat1) {currentStat1 += regenRate1.value * Time.deltaTime;}
+        if (currentStat2 <= stat2) {currentStat2 += regenRate2.value * Time.deltaTime;}
+        if (currentStat3 <= stat3) {currentStat3 += regenRate3.value * Time.deltaTime;}
+
+        DisplayStats();
     }
 
     private void DrainStat()
     {
-        currentStat1 -= statDrain1.value * Time.deltaTime;
-        currentStat2 -= statDrain2.value * Time.deltaTime;
-        currentStat3 -= statDrain3.value * Time.deltaTime;
+
+        if (currentStat1 >= 0) {currentStat1 -= statDrain1.value * Time.deltaTime;}
+        if (currentStat2 >= 0) {currentStat2 -= statDrain2.value * Time.deltaTime;}
+        if (currentStat3 >= 0) {currentStat3 -= statDrain3.value * Time.deltaTime;}
 
         DisplayStats();
     }
@@ -94,45 +138,41 @@ public class NPC_Behavior : MonoBehaviour
 
     private void OnMouseDown()
     {
-        isDraining = !isDraining;
+        statDisplay.InputNPC(this);
+
         particle.gameObject.SetActive(true);
-        isPossessed = !isPossessed;
+        backdropSprite.size = new Vector2(3f,0.5f);
+        titleObject.transform.localPosition = new Vector3(0,titleStartY,0);
 
-        if (isPossessed == true)
-        {
-            particle.gameObject.SetActive(true);
-        }
-
-        else
-        {
-            particle.gameObject.SetActive(false);
-        }
-
+        SetObjectStates(false);
     }
 
     private void OnMouseEnter()
     {
-        titleObject.transform.Translate(0,1.35f,0);
 
-    }
-
-    private void OnMouseOver()
-    {
-        statBar1.gameObject.SetActive(true);
-        statBar2.gameObject.SetActive(true);
-        statBar3.gameObject.SetActive(true);
+        if (isPossessed) return;
 
         backdropSprite.size = new Vector2(3f,2f);
+        titleObject.transform.localPosition = new Vector3(0,titleStartY + 1.35f,0);
+        SetObjectStates(true);
     }
+
 
     private void OnMouseExit()
     {
-        titleObject.transform.Translate(0,-1.35f,0);
-        statBar1.gameObject.SetActive(false);
-        statBar2.gameObject.SetActive(false);
-        statBar3.gameObject.SetActive(false);
+        if(isPossessed) return;
 
         backdropSprite.size = new Vector2(3f,0.5f);
+        titleObject.transform.localPosition = new Vector3(0,titleStartY,0);
+        SetObjectStates(false);
+    }
+
+
+    private void SetObjectStates(bool state)
+    {
+        statBar1.gameObject.SetActive(state);
+        statBar2.gameObject.SetActive(state);
+        statBar3.gameObject.SetActive(state);
     }
 
 }

@@ -623,8 +623,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -0, y: -0.4318}
-  m_SizeDelta: {x: 5, y: 4.0363}
+  m_AnchoredPosition: {x: -0, y: -0.4}
+  m_SizeDelta: {x: 5, y: 4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &7395170232165660341
 Canvas:
@@ -905,13 +905,20 @@ MonoBehaviour:
   stat1: 10
   stat2: 10
   stat3: 10
-  backdropSprite: {fileID: 5558220589889451091}
-  statBar1: {fileID: 8370411096114096681}
-  statBar2: {fileID: 1332652981775188315}
-  statBar3: {fileID: 8833169842063887698}
+  normalizedStat1: 0
+  normalizedStat2: 0
+  normalizedStat3: 0
   statDrain1: {fileID: 11400000, guid: cbaa26bc1fd00a84281c40de78118e05, type: 2}
   statDrain2: {fileID: 11400000, guid: cbaa26bc1fd00a84281c40de78118e05, type: 2}
   statDrain3: {fileID: 11400000, guid: cbaa26bc1fd00a84281c40de78118e05, type: 2}
+  regenRate1: {fileID: 0}
+  regenRate2: {fileID: 0}
+  regenRate3: {fileID: 0}
+  statBar1: {fileID: 8370411096114096681}
+  statBar2: {fileID: 1332652981775188315}
+  statBar3: {fileID: 8833169842063887698}
+  backdropSprite: {fileID: 5558220589889451091}
+  isPossessed: 0
   particle: {fileID: 7585508010946530667}
 --- !u!61 &1904375500348343566
 BoxCollider2D:
@@ -5798,7 +5805,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9104091026690105848}
   m_LocalRotation: {x: 0.70710695, y: -0, z: -0, w: 0.70710665}
-  m_LocalPosition: {x: -0.006, y: 0, z: 0.079}
+  m_LocalPosition: {x: -0.006, y: -0.000000037252903, z: 0.078999996}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
